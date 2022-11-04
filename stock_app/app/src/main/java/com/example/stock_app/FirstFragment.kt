@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stock_app.databinding.FragmentFirstBinding
 
@@ -38,14 +39,17 @@ class FirstFragment : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
-        val view = view.findViewById<View>(R.layout.fragment_first) as RecyclerView
+    ): View {
+        _binding = FragmentFirstBinding.inflate(inflater,container,false)
 
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val adapter = StockAdapter(items, requireContext())
+        binding.rvStock.adapter = adapter
+        binding.rvStock.setLayoutManager(LinearLayoutManager(requireContext()));
         /*
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
