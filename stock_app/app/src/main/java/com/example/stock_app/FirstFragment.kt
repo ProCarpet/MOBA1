@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stock_app.databinding.FragmentFirstBinding
+import com.example.stock_app.model.VolleyStockRepository
 
 
 /**
@@ -41,20 +42,29 @@ class FirstFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFirstBinding.inflate(inflater,container,false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = StockAdapter(items, requireContext())
-        binding.rvStock.adapter = adapter
+        //val adapter = StockAdapter(items, requireContext())
+        //binding.rvStock.adapter = adapter
+
+        val stockCallBack: (Stock) -> Unit = { stock ->
+            val data = mutableListOf(stock)
+            println("in dat$data")
+            binding.rvStock.adapter = StockAdapter(data,requireContext()) //requirecontex rly needed?
+        }
+
+        VolleyStockRepository(requireContext()).getData(stockCallBack)
+
         binding.rvStock.setLayoutManager(LinearLayoutManager(requireContext()));
         /*
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }*/
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
