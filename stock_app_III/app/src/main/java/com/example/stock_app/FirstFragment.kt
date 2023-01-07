@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.stock_app.databinding.FragmentFirstBinding
 import com.example.stock_app.model.VolleyStockRepository
 
@@ -27,6 +29,8 @@ class FirstFragment : Fragment() {
         Stock("eBay", "EBAY", 54.05),
         Stock("Twitter", "TWTR", 45.41),
         Stock("Snapchat", "SNAP", 28.11))
+
+    var added_items = mutableListOf<Stock>()
 
 
     private var _binding: FragmentFirstBinding? = null
@@ -56,7 +60,15 @@ class FirstFragment : Fragment() {
 
         VolleyStockRepository(requireContext()).getData(stockCallBack)
 
-        binding.rvStock.setLayoutManager(LinearLayoutManager(requireContext()));
+        binding.rvStock.setLayoutManager(LinearLayoutManager(requireContext()))
+
+        binding.itemAddButton.setOnClickListener {  view ->
+            var stock = binding.stockInput.text.toString()
+            var symbol = binding.symbolInput.text.toString()
+            added_items.add(Stock(stock,symbol,0.0))
+            binding.rvStock.adapter = StockAdapter(added_items,requireContext())
+        }
+
         /*
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
